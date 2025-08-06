@@ -7,13 +7,16 @@ export default function ProfileScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>('Guest User');
   const [avatar, setAvatar] = useState<string>('default-avatar-url.png');
   const [loading, setLoading] = useState(true);
+  const [userJabatan, setUserJabatan] = useState<string>('Staff');
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const storedName = await AsyncStorage.getItem('userName');
         const storedAvatar = await AsyncStorage.getItem('userAvatar');
+        const storedJabatan = await AsyncStorage.getItem('userJabatan');
 
+        if (storedJabatan) setUserJabatan(storedJabatan);
         if (storedName) setUsername(storedName);
         if (storedAvatar) setAvatar(storedAvatar);
 
@@ -50,7 +53,7 @@ export default function ProfileScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
         <Text style={styles.nameText}>{username}</Text>
-        <Text style={styles.joinedText}>Joined 1 year ago</Text>
+        <Text style={styles.jabatanText}>{userJabatan}</Text>
       </View>
 
       {/* Profile Section */}
@@ -135,7 +138,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#111',
   },
-  joinedText: {
+  jabatanText: {
     fontSize: 14,
     color: '#666',
     marginBottom: 20,

@@ -4,16 +4,41 @@ import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function DetailProfileScreen({ navigation }: any) {
-  const [user, setUser] = useState<any>(null);
+  // Ubah state user untuk menampung data yang lebih lengkap
+  // daripada hanya nama pengguna.
+  const [user, setUser] = useState<any>({
+    name: null,
+    email: null,
+    phoneNumber: null,
+    gender: null,
+    birthPlace: null,
+    birthDate: null,
+    address: null,
+    position: null,
+    rank: null,
+    department: null,
+    bankName: null,
+    bankAccountNumber: null,
+    bankAccountHolder: null,
+    joinDate: null,
+  });
   const [activeTab, setActiveTab] = useState<'personal' | 'professional' | 'document'>('personal');
 
   // Ambil data user dari AsyncStorage
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('user');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
+        // Coba ambil data user lengkap
+        const storedUserData = await AsyncStorage.getItem('userData'); 
+        if (storedUserData) {
+          // Jika ada, parse sebagai JSON
+          setUser(JSON.parse(storedUserData));
+        } else {
+          // Jika tidak ada data lengkap, coba ambil nama saja (untuk tampilan sementara)
+          const storedUserName = await AsyncStorage.getItem('userName');
+          if (storedUserName) {
+            setUser((prevUser: any) => ({ ...prevUser, name: storedUserName }));
+          }
         }
       } catch (error) {
         console.error('Gagal memuat data user dari AsyncStorage:', error);
