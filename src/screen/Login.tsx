@@ -33,7 +33,8 @@ export default function LoginScreen() {
     const response = await api.post('/login', { email, password });
     const { token, user } = response.data;
 
-    // Simpan nama user ke AsyncStorage
+    // Simpan token & nama user ke AsyncStorage
+    await AsyncStorage.setItem('auth_token', token);
     await AsyncStorage.setItem('userName', user.name);
 
     Alert.alert('Welcome', `Hello, ${user.name}`);
@@ -43,6 +44,7 @@ export default function LoginScreen() {
     Alert.alert('Login Failed', error.response?.data?.message || 'Something went wrong');
   }
 };
+
 
   return (
     <View style={styles.root}>

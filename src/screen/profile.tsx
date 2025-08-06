@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
 
 export default function ProfileScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>('Guest User');
-  const [avatar, setAvatar] = useState<string>('default-avatar-url.png');
+  const [avatar, setAvatar] = useState<string>('https://i.pinimg.com/736x/21/f6/fc/21f6fc4abd29ba736e36e540a787e7da.jpg');
   const [loading, setLoading] = useState(true);
   const [userJabatan, setUserJabatan] = useState<string>('Staff');
+  const handleSignOut = async (navigation: any) => {
+  try {
+    // Hapus token dan user info
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('username');
+
+    // Arahkan ke halaman login
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  } catch (error) {
+    Alert.alert('Error', 'Gagal keluar, coba lagi.');
+    console.error('Error sign out:', error);
+  }
+};
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -75,8 +91,8 @@ export default function ProfileScreen({ navigation }: any) {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Pengaturan</Text>
 
-        <TouchableOpacity style={styles.menuItem}>
-          <View style={styles.menuLeft}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('changePassword')}>
+          <View style={styles.menuLeft} >
             <Icon name="key" size={24} color="#7c3aed" />
             <Text style={styles.menuText}>Keamanan</Text>
           </View>
@@ -93,9 +109,20 @@ export default function ProfileScreen({ navigation }: any) {
       </View>
 
       {/* Sign Out */}
-      <TouchableOpacity style={styles.signOutButton} onPress={() => console.log('Logout')}>
-        <Text style={styles.signOutText}>Sign Out</Text>
-      </TouchableOpacity>
+      <TouchableOpacity style={styles.signOutButton}
+  onPress={() =>
+    Alert.alert(
+      'Konfirmasi',
+      'Apakah kamu yakin ingin keluar?',
+      [
+        { text: 'Batal', style: 'cancel' },
+        { text: 'Ya', onPress: () => handleSignOut(navigation) },
+      ],
+      { cancelable: true }
+    )
+  }>
+  <Text style={ styles.signOutText}>Sign Out</Text>
+</TouchableOpacity>
     </View>
   );
 }
@@ -175,14 +202,14 @@ const styles = StyleSheet.create({
   },
   signOutButton: {
     borderWidth: 1,
-    borderColor: '#007bff',
+    borderColor: 'red',
     paddingVertical: 10,
     paddingHorizontal: 40,
     borderRadius: 12,
     marginTop: 30,
   },
   signOutText: {
-    color: '#007bff',
+    color: 'red',
     fontSize: 16,
     fontWeight: '600',
   },

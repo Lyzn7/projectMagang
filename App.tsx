@@ -11,12 +11,15 @@ import MapsScreen from './src/screen/Maps';
 import gaji from './src/screen/gaji';
 import DetailProfileScreen from './src/screen/detailprofil';
 import EditProfileScreen from './src/screen/editprofil';
+import ChangePasswordScreen from './src/screen/ChangePassword';
 const Stack = createNativeStackNavigator<RootStackParamList>();
+import SplashScreen from './src/screen/SplashScreen';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="OnboardingScreen">
+      <Stack.Navigator initialRouteName="SplashScreen">
+        <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
@@ -26,10 +29,7 @@ export default function App() {
         <Stack.Screen name="gaji" component={gaji} options={{ headerShown: false }} />
         <Stack.Screen name="detailprofil" component={DetailProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="editprofil" component={EditProfileScreen} options={{ headerShown: false }} />
-
-
-
-
+        <Stack.Screen name="changePassword" component={ChangePasswordScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

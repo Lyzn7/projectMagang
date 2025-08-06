@@ -9,4 +9,6 @@ export type RootStackParamList = {
   gaji:undefined;
   detailprofil: undefined;
   editprofil: undefined;
+  changePassword: undefined;
+  SplashScreen: undefined;
 };
